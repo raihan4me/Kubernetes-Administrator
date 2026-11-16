@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orders-pvc
+  namespace: shop
+spec:
+  storageClassName: local-manual
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-writer
+  namespace: shop
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: orders-writer
+  template:
+    metadata:
+      labels:
+        app: orders-writer
+    spec:
+      containers:
+      - name: writer
+        image: busybox:1.36
+        command: ["sh", "-c", "while true; do echo \"order $(date +%s) from $HOSTNAME\" >> /data/orders.log; sleep 10; done"]
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: orders-pvc
