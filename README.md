@@ -13,14 +13,26 @@ Learning Objectives
 By the end of this lab you will be able to:
 
 Build a multi-node cluster, install a CNI plugin, and inspect control-plane components, static pods and certificates.
+
 Authenticate a new user with the CertificateSigningRequest API and authorise users and ServiceAccounts with Roles, ClusterRoles and bindings.
+
 Deploy workloads with ConfigMaps, Secrets, probes and resource limits, and enforce ResourceQuota and LimitRange.
+
 Perform rolling updates and rollbacks.
+
 Control placement with taints, tolerations and node affinity.
+
 Install add-ons with Helm and configure a HorizontalPodAutoscaler.
+
 Expose applications with ClusterIP, NodePort and Ingress, and verify service discovery through CoreDNS.
+
 Write ingress and egress NetworkPolicies, including the DNS egress exception.
+
 Provide static (local PV) and dynamic (StorageClass) persistent storage, including StatefulSet volume claim templates.
+
 Drain and uncordon nodes with PodDisruptionBudgets in place.
+
 Back up etcd with etcdctl and restore it with etcdutl.
+
 Troubleshoot node, control-plane and application failures using kubectl, crictl, systemctl and journalctl.
+
