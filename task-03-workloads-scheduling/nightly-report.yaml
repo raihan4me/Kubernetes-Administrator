@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nightly-report
+  namespace: shop
+spec:
+  template:
+    spec:
+      nodeName: cka-worker2
+      restartPolicy: OnFailure
+      containers:
+      - name: report
+        image: busybox:1.36
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "report generated on $(hostname)" && sleep 5

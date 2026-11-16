@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: shop
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+        tier: api
+    spec:
+      containers:
+      - name: echo
+        image: hashicorp/http-echo:0.2.3
+        args:
+        - "-listen=:5678"
+        - "-text=$(MESSAGE) (served by $(POD_NAME))"
+        env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: MESSAGE
+ - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: API_KEY
+        ports:
+        - containerPort: 5678
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5678
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 50m
+            memory: 32Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: shop
+spec:
+  selector:
+    app: backend
+  ports:
+  - name: http
+    port: 5678
+    targetPort: 5678

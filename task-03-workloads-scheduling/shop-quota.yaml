@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: shop-quota
+  namespace: shop
+spec:
+  hard:
+    pods: "30"
+    requests.cpu: "2"
+    requests.memory: 2Gi
+    limits.memory: 4Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: shop-defaults
+  namespace: shop
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: 50m
+      memory: 32Mi
+    default:
+      cpu: 200m
+      memory: 128Mi
